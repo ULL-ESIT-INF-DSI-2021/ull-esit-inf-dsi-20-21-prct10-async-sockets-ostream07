@@ -1,4 +1,3 @@
 # Desarrollo de Sistemas Informáticos
-### Práctica 9. Sistema de ficheros y creación de procesos en Node.js
-
+### Práctica 10. Cliente y servidor para una aplicación de procesamiento de notas de texto
 * Autor: Saúl Pérez García
