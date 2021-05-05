@@ -1,0 +1,23 @@
+{
+  "name": "ull-esit-inf-dsi-20-21-prct10-async-sockets-ostream07",
+  "version": "1.0.0",
+  "description": "* Autor: Saúl Pérez García",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc-watch --onSuccess \"node dist/index.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct10-async-sockets-ostream07.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct10-async-sockets-ostream07/issues"
+  },
+  "homepage": "https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct10-async-sockets-ostream07#readme",
+  "devDependencies": {
+    "tsc-watch": "^4.2.9"
+  }
+}
