@@ -22,7 +22,10 @@
   "homepage": "https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct10-async-sockets-ostream07#readme",
   "devDependencies": {
     "@types/chai": "^4.2.17",
+    "@types/chalk": "^2.2.0",
     "@types/mocha": "^8.2.2",
+    "@types/node": "^15.0.2",
+    "@types/yargs": "^16.0.1",
     "chai": "^4.3.4",
     "mocha": "^8.3.2",
     "nyc": "^15.1.0",
