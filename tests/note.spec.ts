@@ -7,4 +7,8 @@ describe("note functions tests", () => {
     const note1 = new Note("note1", Color.YELLOW, "yellow test");
     expect(note1.getTitle()).to.be.equal('note1');
   });
+  it("Checks the color of a note", () => {
+    const note1 = new Note("note1", Color.YELLOW, "yellow test");
+    expect(note1.getColor()).to.be.equal('yellow');
+  });
 });
