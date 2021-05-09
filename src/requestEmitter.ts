@@ -1,5 +1,10 @@
 import {EventEmitter} from 'events';
 
+/**
+ * @class RequestEmitter, the client will work with this class to be able to 
+ * communicate correctly with the server, in addition with that, we can fix 
+ * the problem of receiving messages in chunks
+ */
 export class RequestEmitter extends EventEmitter {
   constructor(connection: EventEmitter) {
     super();
