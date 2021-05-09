@@ -62,11 +62,11 @@ A partir de ahora, vamos a pasar a explicar la solución propuesta para esta pr�
 Contiene la clase `Note` con los siguietes atributos:
 
 ```typescript
-/**
-   * @param title, title of a note
-   * @param color, color of a note
-   * @param text, text or body of a note 
-   */
+
+   @param title, title of a note
+   @param color, color of a note
+   @param text, text or body of a note 
+   
 ```
 
 También va a presentar los siguientes métodos:
@@ -193,7 +193,50 @@ Aquí vemos como desde `conenciton` vamos a poder acceder al manejador o callbac
 
 ### ------------------------------------------------------------------------------------------------------------------------------
 
+#### --> Fichero server.ts
 
+En este fichero se encuentran los aspectos relacionados con el servidor, encontrándose dos funciones fundamentales:
+`checkFields` que comprueba que cada uno de los parámetros dados es una string antes de procesar la respuesta en el servidor y `processRequest` donde se van a manejar las distintas respuestas según el comando que haya empleado el usuario.
+
+Nuevamente contaremos con una variable de tipo `RequestType` y en ella, vamos a analizar ``req.type``. Dependiendo de cuál sea, entraremos en uno de los casos integrados en el switch llamando en cada caso a los métodos ``addNote, deleteNote, listNote, readNote, updateNote`` que comentaremos más adelante pero corresponden con los comandos add, remove, list read y update respectivamente.
+
+```typescript
+checkFields(req: RequestType, checkTitle: boolean, checkBody: boolean, checkColor: boolean): boolean
+processRequest(req: RequestType): ResponseType
+```
+
+Además, precisaremos de la ayuda de una varable de tipo `RequestEmitter` llamada `listener` que va a encargarse de procesar la respuesta y luego escribirla en formato JSON:
+
+```typescript
+const server = net.createServer((connection) => {
+  const listener = new RequestEmitter(connection);
+  listener.on('request', (req) => {
+    const resp = processRequest(req);
+    connection.write(JSON.stringify(resp));
+    connection.end();
+  });
+});
+
+server.listen(60300);
+```
+
+### ------------------------------------------------------------------------------------------------------------------------------
+
+#### --> Fichero serverActions.ts
+
+Su funcionamiento se basará en los yargs alojados en el fichero [index.ts de la práctica 8](https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct08-filesystem-notes-app-ostream07/blob/master/src/index.ts) con la diferencia de que ahora se encuentran como las utilidades que ofrece el servidor. Contaremos por tanto, con las siguientes funciones:
+
+``` typescript
+addNote(req: RequestType): ResponseType
+deleteNote(req: RequestType): ResponseType
+updateNote(req: RequestType): ResponseType
+listNote(req: RequestType): ResponseType
+readNote(req: RequestType): ResponseType
+```
+
+Cada una de ellas, corresponde como comentamos anteriormente a los posibles comandos que puede emplear el usuario, add, remove, update, list y read.
+
+Además, a diferencia de lo implementado en la anterior práctica que ya hemos mencionado, en este caso, todos los mensajes de error o de confirmación de que todo ha salido satisfactoriamente serán de tipo `ResponseType`, teniendo `success` a true en caso de que fuera bien o por el contraior, `success` a false y además, entraría en juego un atributo nuevo al type sugerido llamado `errorMessage` que proporcionará un mensaje de error informando al usuario.
 
 ### ------------------------------------------------------------------------------------------------------------------------------
 
@@ -274,7 +317,19 @@ Lo primero sería comprobar si hay color tras convertirlo al enum, una vez hecho
 Si todo va bien, se activará el evento `data` donde vamos a ir escribiendo la información correspondiente a la petición que el cliente solicitó. 
 Posteriormente, tendremos el evento `end` y declararemos una variable de tipo `ResponseType` con la respuesta del servidor mediante el atributo `success`. Finalmente, nos aparecerá un mensaje en verde diciendo que la nota se ha añadido. Aquí un ejemplo:
 
+Para su ejecución, debemos tener abiertas dos terminales, en la primera, vamos a tener nuestro servidor escuchando las peticiones del cliente:
+
 ```
+Terminal 1:
+
+[~/DSI/practica10(master)]$npx ts-node src/server.ts
+```
+
+En la segunda terminal, se van a realizar las peticiones del cliente. A continuación y a modo de ejemplo, vamos a probar algunos comandos:
+
+```
+Terminal 2:
+
 [~/DSI/practica10(master)]$npx ts-node src/index.ts add --user="edusegre" --title="Special yellow note" --body="This is now a special yellow note" --color="yellow"
 New note added!
 

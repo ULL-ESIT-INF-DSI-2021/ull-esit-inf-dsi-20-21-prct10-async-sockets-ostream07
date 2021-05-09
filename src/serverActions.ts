@@ -3,6 +3,11 @@ import { RequestType, ResponseType } from "./interfaces";
 import { loadNotes, removeNote, saveNote } from './fileIO';
 import { getNoteByTitle, getColorByString } from "./utils";
 
+/**
+ * @function addNote, add notes
+ * @param req variable of type RequestType
+ * @returns a response with the correspondent ResponseType
+ */
 export function addNote(req: RequestType): ResponseType {
   let userNotes = loadNotes(req.user);
   if (!getNoteByTitle(req.title, userNotes)) {
@@ -19,6 +24,11 @@ export function addNote(req: RequestType): ResponseType {
   }
 }
 
+/**
+ * @function removeNote, delete notes
+ * @param req variable of type RequestType
+ * @returns a response with the correspondent ResponseType
+ */
 export function deleteNote(req: RequestType): ResponseType {
   if (removeNote(req.user, req.title)) {
     return {success: true, type: 'remove'};
@@ -27,6 +37,11 @@ export function deleteNote(req: RequestType): ResponseType {
   }
 }
 
+/**
+ * @function updateNote, modify notes
+ * @param req variable of type RequestType
+ * @returns a response with the correspondent ResponseType
+ */
 export function updateNote(req: RequestType): ResponseType {
   let userNotes = loadNotes(req.user);
   if (getNoteByTitle(req.title, userNotes)) {
@@ -43,11 +58,21 @@ export function updateNote(req: RequestType): ResponseType {
   }
 }
 
+/**
+ * @function listNote, list the notes of an user
+ * @param req variable of type RequestType
+ * @returns a response with the correspondent ResponseType
+ */
 export function listNote(req: RequestType): ResponseType {
   let userNotes = loadNotes(req.user);
   return {success: true, type: 'list', notes: userNotes};
 }
 
+/**
+ * @function addNote, read the notes of an user
+ * @param req variable of type RequestType
+ * @returns a response with the correspondent ResponseType
+ */
 export function readNote(req: RequestType): ResponseType {
   let userNotes = loadNotes(req.user);
   let note = getNoteByTitle(req.title, userNotes);

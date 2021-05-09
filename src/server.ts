@@ -3,6 +3,17 @@ import { RequestType, ResponseType } from './interfaces';
 import { RequestEmitter } from './requestEmitter';
 import { addNote, deleteNote, listNote, readNote, updateNote } from './serverActions';
 
+/**
+ * @function checkFields, checks if the givens parameters are strings 
+ * before processing the response on the server
+ * @param req variable of type RequestType
+ * @param checkTitle boolean that checks if the given title is a string
+ * @param checkBody boolean that checks if the given text of the note is a 
+ * string
+ * @param checkColor boolean that checks if the given color of the note is a 
+ * string
+ * @returns false if any of the parameters is not a string and true in other case.
+ */
 function checkFields(req: RequestType, checkTitle: boolean, checkBody: boolean, checkColor: boolean): boolean {
   if (checkTitle && typeof req.title !== 'string') {
     return false;
@@ -17,6 +28,11 @@ function checkFields(req: RequestType, checkTitle: boolean, checkBody: boolean, 
   return true;
 }
 
+/**
+ * @function processRequest, process the client petition and gives a response
+ * @param req variable of type RequestType
+ * @returns a ResponseType with the apropiated message
+ */
 function processRequest(req: RequestType): ResponseType {
   if (typeof req.type === 'string' && typeof req.user === 'string') {
     switch (req.type) {
