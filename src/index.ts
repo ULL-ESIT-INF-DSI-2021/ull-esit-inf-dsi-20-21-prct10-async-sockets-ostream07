@@ -1,7 +1,7 @@
 import * as yargs from 'yargs';
 import chalk from "chalk";
 import {Note} from './note';
-import { getNoteByTitle, getColorByString, getColorizer } from "./utils";
+import { getColorByString, getColorizer } from "./utils";
 import { RequestType, ResponseType } from './interfaces';
 import * as net from 'net';
 

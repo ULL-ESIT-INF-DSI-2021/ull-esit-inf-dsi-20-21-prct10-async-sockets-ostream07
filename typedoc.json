@@ -1,6 +1,13 @@
 {
     "entryPoints": [
-        "./src/index.ts"
+        "./src/index.ts",
+        "./src/note.ts",
+        "./src/fileIO.ts",
+        "./src/utils.ts",
+        "./src/interfaces.ts",
+        "./src/requestEmitter.ts",
+        "./src/server.ts",
+        "./src/serverActions.ts"
     ],
     "out": "./docs"
 }
