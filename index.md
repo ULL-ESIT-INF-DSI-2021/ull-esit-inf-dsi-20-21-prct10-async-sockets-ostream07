@@ -84,7 +84,7 @@ Además, cuenta con un enumerado denominado `Color` que contiene los distintos c
 
 Pasamos ahora a hablar sobre el contenido de `interfaces.ts`.
 
-#### --> Fichero `interfaces.ts`
+#### --> Fichero interfaces.ts
 
 Tiene dos interfaces, la primera de ellas, `IndexEntry`, que nos va a permitir almacenar información sobre el título y el usuario de una determinada nota, para asignarlo como entrada a un **índice**, donde estarán alojados todos los títulos de las notas de cada usuario. La segunda es `NoteIndex` que tiene un `index` que va a ser de tipo `IndexEntry` para poder ver todas las notas de cada usuario.
 
