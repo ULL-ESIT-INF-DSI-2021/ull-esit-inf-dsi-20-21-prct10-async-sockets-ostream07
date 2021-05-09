@@ -44,4 +44,7 @@ describe("utils function tests", () => {
   it("Checks if the color of the note is yellow", () => {
     expect(getColorByString('yellow')).to.be.equal(Color.YELLOW);
   });
+  it("Checks if the color of the note is green", () => {
+    expect(getColorByString('GREEN')).to.be.equal(Color.GREEN);
+  });
 });
