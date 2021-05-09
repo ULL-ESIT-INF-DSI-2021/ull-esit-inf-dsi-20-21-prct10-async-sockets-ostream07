@@ -106,7 +106,7 @@ FN:69,getColorizer
 FNF:4
 FNH:2
 FNDA:2,getNoteByTitle
-FNDA:3,searchEntryIndex
+FNDA:4,searchEntryIndex
 FNDA:0,getColorByString
 FNDA:0,getColorizer
 DA:1,1
@@ -117,10 +117,10 @@ DA:13,4
 DA:14,1
 DA:17,1
 DA:26,1
-DA:27,3
-DA:28,4
+DA:27,4
+DA:28,9
 DA:29,2
-DA:32,1
+DA:32,2
 DA:42,1
 DA:43,0
 DA:45,0
@@ -142,7 +142,7 @@ LH:14
 BRDA:13,0,0,1
 BRDA:13,0,1,3
 BRDA:28,1,0,2
-BRDA:28,1,1,2
+BRDA:28,1,1,7
 BRDA:44,2,0,0
 BRDA:44,2,1,0
 BRDA:44,2,2,0

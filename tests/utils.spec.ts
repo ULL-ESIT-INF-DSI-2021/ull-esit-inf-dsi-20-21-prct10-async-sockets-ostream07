@@ -26,4 +26,11 @@ describe("utils function tests", () => {
     const entry: IndexEntry = {"title":"Blue note","fileName":"Blue_note.json"}; 
     expect(searchEntryIndex(entry.title, indexTest)).to.be.deep.equal(entry);
   });
+  it("it search a false entry for a user index", () => {
+    const indexTest: NoteIndex = {"index":[{"title":"Yellow note","fileName":"Yellow_note.json"},
+    {"title":"Red note","fileName":"Red_note.json"},{"title":"Blue note","fileName":"Blue_note.json"},
+    {"title":"Green note","fileName":"Green_note.json"},{"title":"Black note","fileName":"Black_note.json"}]};
+    const entry: IndexEntry = {"title":"Orange note","fileName":"Blue_note.json"}; 
+    expect(searchEntryIndex(entry.title, indexTest)).to.be.false;
+  });
 });
