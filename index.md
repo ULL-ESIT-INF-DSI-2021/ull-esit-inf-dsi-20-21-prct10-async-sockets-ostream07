@@ -433,7 +433,7 @@ describe("fileIO functions tests", () => {
 
 Para la realización de esta práctica me he servido tanto de los ejemplos que se muestran en el enunciado de la práctica, como de los apuntes sobre Node.js también en el aula, además de material externo consultado en la web.
 
-* [Enunciado de la práctica](https://ull-esit-inf-dsi-2021.github.io/prct08-filesystem-notes-app/)
+* [Enunciado de la práctica](https://ull-esit-inf-dsi-2021.github.io/prct10-async-sockets/)
 * [GitHub Page de Yargs](https://github.com/yargs/yargshttps://github.com/yargs/yargs)
 * [GitHub Page de Chalk](https://github.com/chalk/chalk)
 * [Apuntes Node.js](https://ull-esit-inf-dsi-2021.github.io/nodejs-theory/)
