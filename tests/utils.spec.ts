@@ -50,4 +50,7 @@ describe("utils function tests", () => {
   it("Checks if the color of the note is black", () => {
     expect(getColorByString('blACK')).to.be.equal(Color.BLACK);
   });
+  it("returns false because the color gray is not available", () => {
+    expect(getColorByString('GRAY')).to.be.false;
+  });
 });
