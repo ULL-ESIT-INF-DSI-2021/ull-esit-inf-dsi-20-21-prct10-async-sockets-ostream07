@@ -1,8 +1,10 @@
 import * as yargs from 'yargs';
 import chalk from "chalk";
 import {Note} from './note';
-import { loadNotes, removeNote, saveNote} from './fileIO';
 import { getNoteByTitle, getColorByString, getColorizer } from "./utils";
+import { RequestType, ResponseType } from './interfaces';
+import * as net from 'net';
+
 
 /**
  * @api Yarg for the command add
@@ -35,20 +37,35 @@ yargs.command({
   handler(argv) {
     if (typeof argv.title === 'string' && typeof argv.user === 'string' && 
           typeof argv.body === 'string' && typeof argv.color === 'string') {
+      
+      const color = getColorByString(argv.color);
+      if(color) {
+        const req: RequestType = {
+          type: 'add',
+          user: argv.user,
+          title: argv.title,
+          body: argv.body,
+          color: color
+        };
+        const client = net.connect({port: 60300});
+        client.write(JSON.stringify(req) + '\0');
 
-      let userNotes = loadNotes(argv.user);
-      if (!getNoteByTitle(argv.title, userNotes)) {
-        let color = getColorByString(argv.color);
-        if (color) {
-          let note = new Note(argv.title, color, argv.body);
-          saveNote(argv.user, note);
-          console.log(chalk.green('New note added!'));
-        } else {
-          console.log(chalk.red('Invalid color'));
-          console.log(chalk.red('Admited colors: Red, Blue, Green, Yellow, Black'));
-        }
+        let wholeData = '';
+        client.on('data', (dataChunk) => {
+          wholeData += dataChunk;
+        });
+        
+        client.on('end', () => {
+          const resp: ResponseType = JSON.parse(wholeData);
+          if(resp.success) {
+            console.log(chalk.green('New note added!'));
+          } else {
+            console.log(chalk.red(resp.errorMessage));
+          }
+        });
       } else {
-        console.log(chalk.red('Error! Already exist a note with this title'));
+        console.log(chalk.red('Invalid color'));
+        console.log(chalk.red('Admited colors: Red, Blue, Green, Yellow, Black'));
       }
     } else {
       console.log(chalk.red('It is necesary to give all the arguments'));
@@ -60,7 +77,7 @@ yargs.command({
  * @api Yarg for the command modify
  */
 yargs.command({
-  command: 'modify',
+  command: 'update',
   describe: 'Modify an existing note',
   builder: {
     title: {
@@ -88,19 +105,34 @@ yargs.command({
     if (typeof argv.title === 'string' && typeof argv.user === 'string' && 
               typeof argv.body === 'string' && typeof argv.color === 'string') {
       
-      let userNotes = loadNotes(argv.user);
-      if (getNoteByTitle(argv.title, userNotes)) {
-        let color = getColorByString(argv.color);
-        if (color) {
-          let note = new Note(argv.title, color, argv.body);
-          saveNote(argv.user, note);
-          console.log(chalk.green('Note modified correctly!'));
-        } else {
-          console.log(chalk.red('Invalid color'));
-          console.log(chalk.red('Admited colors: Red, Blue, Green, Yellow, Black'));
-        }
+      const color = getColorByString(argv.color);
+      if (color) {
+        const req: RequestType = {
+          type: 'update',
+          user: argv.user,
+          title: argv.title,
+          body: argv.body,
+          color: color
+        };
+        const client = net.connect({ port: 60300 });
+        client.write(JSON.stringify(req) + '\0');
+
+        let wholeData = '';
+        client.on('data', (dataChunk) => {
+          wholeData += dataChunk;
+        });
+
+        client.on('end', () => {
+          const resp: ResponseType = JSON.parse(wholeData);
+          if (resp.success) {
+            console.log(chalk.green('Note modified correctly!'));
+          } else {
+            console.log(chalk.red(resp.errorMessage));
+          }
+        });
       } else {
-        console.log(chalk.red('Error! The note does not exist'));
+        console.log(chalk.red('Invalid color'));
+        console.log(chalk.red('Admited colors: Red, Blue, Green, Yellow, Black'));
       }
     } else {
       console.log(chalk.red('It is necesary to give all the arguments'));
@@ -128,11 +160,30 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.title === 'string' && typeof argv.user === 'string') {
-      if (removeNote(argv.user, argv.title)) {
-        console.log(chalk.green('Correctly removed'));
-      } else {
-        console.error(chalk.red('The note does not exist!'));
-      }
+      
+      const req: RequestType = {
+        type: 'remove',
+        user: argv.user,
+        title: argv.title
+      };
+      const client = net.connect({ port: 60300 });
+      client.write(JSON.stringify(req) + '\0');
+
+      let wholeData = '';
+      client.on('data', (dataChunk) => {
+        wholeData += dataChunk;
+      });
+
+      client.on('end', () => {
+        const resp: ResponseType = JSON.parse(wholeData);
+        if (resp.success) {
+          console.log(chalk.green('Correctly removed'));
+        } else {
+          console.log(chalk.red(resp.errorMessage));
+        }
+      });
+    } else {
+      console.log(chalk.red('Missing title or user'));
     } 
   },
 });
@@ -152,12 +203,32 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.user === 'string') {
-      let userNotes = loadNotes(argv.user);
-      console.log(chalk.green(`Listing notes for user ${argv.user} ...`));
-      for (const note of userNotes) {
-        let colorizer = getColorizer(note);
-        console.log(colorizer(note.getTitle()));
-      }
+      const req: RequestType = {
+        type: 'list',
+        user: argv.user
+      };
+      const client = net.connect({ port: 60300 });
+      client.write(JSON.stringify(req) + '\0');
+
+      let wholeData = '';
+      client.on('data', (dataChunk) => {
+        wholeData += dataChunk;
+      });
+
+      client.on('end', () => {
+        const resp: ResponseType = JSON.parse(wholeData);
+        if (resp.success) {
+          console.log(chalk.green(`Listing notes for user ${argv.user} ...`));
+          let userNotes = resp.notes;
+          for (const noteJSON of <any[]>userNotes) {
+            const note = new Note(noteJSON.title, noteJSON.color, noteJSON.text);
+            let colorizer = getColorizer(note);
+            console.log(colorizer(note.getTitle()));
+          }
+        } else {
+          console.log(chalk.red(resp.errorMessage));
+        }
+      });
     } else {
       console.log(chalk.red('Error, invalid argument'));
     }
@@ -184,16 +255,33 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.title === 'string' && typeof argv.user === 'string') {
-      let userNotes = loadNotes(argv.user);
-      let note = getNoteByTitle(argv.title, userNotes);
-      if (note) {
-        let colorizer = getColorizer(note);
-        console.log(chalk.green('Your notes:'));
-        console.log(colorizer(note.getTitle()));
-        console.log(colorizer(note.getText()));
-      } else {
-        console.log(chalk.red(`The user ${argv.user} does not have any notes`));
-      }
+      
+      const req: RequestType = {
+        type: 'read',
+        user: argv.user,
+        title: argv.title
+      };
+      const client = net.connect({ port: 60300 });
+      client.write(JSON.stringify(req) + '\0');
+
+      let wholeData = '';
+      client.on('data', (dataChunk) => {
+        wholeData += dataChunk;
+      });
+
+      client.on('end', () => {
+        const resp: ResponseType = JSON.parse(wholeData);
+        if (resp.success) {
+          const noteJSON: any = resp.notes[0];
+          const note = new Note(noteJSON.title, noteJSON.color, noteJSON.text);
+          let colorizer = getColorizer(note);
+          console.log(chalk.green('Your note:'));
+          console.log(colorizer(note.getTitle()));
+          console.log(colorizer(note.getText()));
+        } else {
+          console.log(chalk.red(resp.errorMessage));
+        }
+      });
     } else {
       console.log(chalk.red('Invalid arguments!'));
     }

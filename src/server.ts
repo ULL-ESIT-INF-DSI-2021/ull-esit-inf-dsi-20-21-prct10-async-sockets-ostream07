@@ -58,7 +58,8 @@ const server = net.createServer((connection) => {
   const listener = new RequestEmitter(connection);
   listener.on('request', (req) => {
     const resp = processRequest(req);
-    connection.write(JSON.stringify(resp) + '\0');
+    connection.write(JSON.stringify(resp));
+    connection.end();
   });
 });
 

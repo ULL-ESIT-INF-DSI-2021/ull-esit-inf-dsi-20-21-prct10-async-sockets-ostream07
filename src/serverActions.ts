@@ -1,7 +1,7 @@
 import { Note } from './note';
 import { RequestType, ResponseType } from "./interfaces";
 import { loadNotes, removeNote, saveNote } from './fileIO';
-import { getNoteByTitle, getColorByString, getColorizer } from "./utils";
+import { getNoteByTitle, getColorByString } from "./utils";
 
 export function addNote(req: RequestType): ResponseType {
   let userNotes = loadNotes(req.user);
@@ -54,6 +54,6 @@ export function readNote(req: RequestType): ResponseType {
   if (note) {
     return {success: true, type: 'read', notes: [note]};
   } else {
-    return {success: false, type: 'error', errorMessage: `The user ${req.user} does not have any notes`};
+    return {success: false, type: 'error', errorMessage: `The user ${req.user} does not have any note with this title`};
   }
 }
